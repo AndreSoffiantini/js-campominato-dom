@@ -111,11 +111,16 @@ function activateCell(selector, bombs, selected_class, bomb_class) {
     for (let index = 0; index < cells.length; index++) {
         const cell = cells[index];
         const cellNumber = parseInt(cell.innerHTML);
-        console.log(cellNumber);
+        //console.log(cellNumber);
         cell.addEventListener('click', function() {
 
             if (bombs.includes(cellNumber)) {
+
+                // SE la cella contiene una bomba si colora di rosso e la partita termina
                 cell.classList.add(bomb_class);
+                alert("Hai perso, riprova!");
+                location.reload();
+
             } else {
                 cell.classList.add(selected_class);
             }
