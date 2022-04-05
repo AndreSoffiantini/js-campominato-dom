@@ -120,9 +120,14 @@ function activateCell(selector, bombs, selected_class, bomb_class) {
                     /* SE la cella contiene una bomba si colora di rosso e la partita termina:
                     viene mostrato il numero di caselle senza bomba selezionate */
                     cell.classList.add(bomb_class);
-                    alert(`Hai perso, riprova! Punteggio ottenuto: ${counter}`);
 
                     showBombs(bombs, cells, bomb_class);
+
+                    setTimeout(function() {
+                        alert(`Hai perso, riprova! Punteggio ottenuto: ${counter}`);
+                    }, 0);
+
+                    document.getElementById("score").innerHTML = `Punteggio: ${counter}`;
 
                     endGame = true;
 
@@ -142,7 +147,9 @@ function activateCell(selector, bombs, selected_class, bomb_class) {
                 tutte le celle senza bomba, quindi vittoria! */
                 if (counter == noBombsCells_number) {
 
-                    alert("Congratulazioni, hai vinto!!");
+                    setTimeout(function() {
+                        alert("Congratulazioni, hai vinto!!");
+                    }, 0);
 
                     endGame = true;
 
@@ -176,7 +183,7 @@ playBtn.addEventListener("click", function() {
 
         case "3":
             generateGrid(49, ".grid", "div", "cell_7");
-            bombs = createBombs(1, 1, 49);
+            bombs = createBombs(16, 1, 49);
             activateCell('.cell_7', bombs, 'selected', 'bomb');
             break;
 
@@ -218,8 +225,8 @@ il software scopre tutte le bombe nascoste */
  */
 function showBombs(bombs, cells, bomb_class) {
 
-    for (let index = 0; index < cells.length; index++) {
-        const cell = cells[index];
+    for (let index = 1; index <= cells.length; index++) {
+        const cell = cells[index - 1];
 
         /* Se l'indice è contenuto nell'array di bombe selezionare il figlio di cells_container 
         con quell'indice */
