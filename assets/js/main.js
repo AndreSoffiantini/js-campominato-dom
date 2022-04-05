@@ -6,6 +6,18 @@ con difficoltà 3 => tra 1 e 49
 Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro. */
 
 // Creare una funzione che al click del bottone Play generi una griglia quadrata
+/**
+ * All'interno dell'elemento HTML "container" crea una griglia 
+ * formata da un numero pari a "number_of_cells" 
+ * di elementi del tipo "element_name"
+ * e assegna a ciascuno di essi la classe "class_name".
+ * Restituisce il nodo nella DOM del "container".
+ * @param {number} number_of_cells 
+ * @param {string} container 
+ * @param {string} element_name 
+ * @param {string} class_name 
+ * @returns container
+ */
 function generateGrid(number_of_cells, container, element_name, class_name) {
     const cellsContainer = document.querySelector(container);
 
@@ -37,11 +49,25 @@ o raggiunge il numero massimo possibile di numeri consentiti.
 Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba. */
 
 // Creare una funzione che generi numeri in un intervallo
+/**
+ * Genera un intero random all'interno dell'intervallo compreso tra "min" e "max" (inclusi)
+ * @param {number} min Il minimo dell'intervallo
+ * @param {number} max Il massimo dell'intervallo
+ * @returns 
+ */
 function getRandomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Usare la funzione generatrice per creare un array di bombe
+/**
+ * Restituisce un array di lunghezza "bombs_number" contenente indici generati a random
+ * all'interno dell'intervallo compreso tra "min" e "max"
+ * @param {number} bombs_number Il numero totale di indici contenenti bombe 
+ * @param {number} min Il minimo dell'intervallo di generazione degli indici
+ * @param {number} max Il massimo dell'intervallo di generazione degli indici
+ * @returns 
+ */
 function createBombs(bombs_number, min, max) {
 
     let bombs = [];
@@ -67,6 +93,16 @@ function createBombs(bombs_number, min, max) {
 
 /* Quando l'utente clicca su ogni cella, la cella cliccata si colora di rosso se contiene una bomba,
 altrimenti si colora di azzurro */
+/**
+ * Seleziona tutti gli elementi di classe "selector" e associa ad ognuno di essi un evento
+ * al click, per cui se l'elemento ha un indice appartenente all'array "bombs" generato dalla
+ * funzione createBombs allora avrà il layout dato da "bomb_class", altrimenti avraà quello dato da
+ * "selected_class"
+ * @param {string} selector 
+ * @param {*} bombs 
+ * @param {string} selected_class 
+ * @param {string} bomb_class 
+ */
 function activateCell(selector, bombs, selected_class, bomb_class) {
     const cells = document.querySelectorAll(selector);
     const noBombsCells_number = cells.length - bombs.length;
@@ -173,6 +209,13 @@ deleteBtn.addEventListener("click", function() {
 il software scopre tutte le bombe nascoste */
 
 // Creare una funzione che colori di rosso tutte le celle in cui c'è una bomba
+/**
+ * Assegna la classe "bomb_class" a tutti gli elementi dell'array "cells" che hanno indice
+ * contenuto all'interno dell'array "bombs"
+ * @param {*} bombs 
+ * @param {*} cells 
+ * @param {string} bomb_class 
+ */
 function showBombs(bombs, cells, bomb_class) {
 
     for (let index = 0; index < cells.length; index++) {
