@@ -86,6 +86,8 @@ function activateCell(selector, bombs, selected_class, bomb_class) {
                     cell.classList.add(bomb_class);
                     alert(`Hai perso, riprova! Punteggio ottenuto: ${counter}`);
 
+                    showBombs(bombs, cells, bomb_class);
+
                     endGame = true;
 
                 }
@@ -121,22 +123,23 @@ const playBtn = document.getElementById("playBtn");
 playBtn.addEventListener("click", function() {
 
     let inputValue = document.getElementById("difficulty").value;
+    let bombs = [];
 
     switch (inputValue) {
         case "1":
-            grid = generateGrid(100, ".grid", "div", "cell_10");
+            generateGrid(100, ".grid", "div", "cell_10");
             bombs = createBombs(16, 1, 100);
             activateCell('.cell_10', bombs, 'selected', 'bomb');
             break;
 
         case "2":
-            grid = generateGrid(81, ".grid", "div", "cell_9");
+            generateGrid(81, ".grid", "div", "cell_9");
             bombs = createBombs(16, 1, 81);
             activateCell('.cell_9', bombs, 'selected', 'bomb');
             break;
 
         case "3":
-            grid = generateGrid(49, ".grid", "div", "cell_7");
+            generateGrid(49, ".grid", "div", "cell_7");
             bombs = createBombs(1, 1, 49);
             activateCell('.cell_7', bombs, 'selected', 'bomb');
             break;
@@ -166,16 +169,25 @@ deleteBtn.addEventListener("click", function() {
 
 });
 
+/* BONUS 2: quando si clicca su una bomba e finisce la partita, 
+il software scopre tutte le bombe nascoste */
 
+// Creare una funzione che colori di rosso tutte le celle in cui c'è una bomba
+function showBombs(bombs, cells, bomb_class) {
 
-/* Creare una funzione che congeli la griglia quando invocata, 
-poi assegnarla agli eventListener relativi alle condizioni di fine partita */
-function freezeGrid(grid) {
+    for (let index = 0; index < cells.length; index++) {
+        const cell = cells[index];
 
-    for (let index = 0; index < grid.childNodes.length; index++) {
-        const cell = grid.childNodes[index];
-        console.log(cell);
-        Object.freeze(cell);
+        /* Se l'indice è contenuto nell'array di bombe selezionare il figlio di cells_container 
+        con quell'indice */
+        if (bombs.includes(index)) {
+
+            // Assegnare al figlio selezionato la classe bomb se non l'ha già assegnata
+            if (!cell.classList.contains(bomb_class)) {
+
+                cell.classList.add(bomb_class);
+
+            }
+        }
     }
-
 }
