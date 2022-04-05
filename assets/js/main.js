@@ -77,33 +77,38 @@ function activateCell(selector, bombs, selected_class, bomb_class) {
 
         cell.addEventListener('click', function() {
 
-            if (bombs.includes(cellNumber)) {
+            if (!endGame) {
 
-                /* SE la cella contiene una bomba si colora di rosso e la partita termina:
-                viene mostrato il numero di caselle senza bomba selezionate */
-                cell.classList.add(bomb_class);
-                alert(`Hai perso, riprova! Punteggio ottenuto: ${counter}`);
-                location.reload();
+                if (bombs.includes(cellNumber)) {
 
-            }
+                    /* SE la cella contiene una bomba si colora di rosso e la partita termina:
+                    viene mostrato il numero di caselle senza bomba selezionate */
+                    cell.classList.add(bomb_class);
+                    alert(`Hai perso, riprova! Punteggio ottenuto: ${counter}`);
 
-            /* SE la cella non contiene una bomba e non è stata ancora selezionata
-            si colora di azzurro e il contatore viene incrementato */
-            else if (!cell.classList.contains(selected_class)) {
+                    endGame = true;
 
-                cell.classList.add(selected_class);
-                counter++;
-                console.log(`counter: ${counter}`);
+                }
 
-            }
+                /* SE la cella non contiene una bomba e non è stata ancora selezionata
+                si colora di azzurro e il contatore viene incrementato */
+                else if (!cell.classList.contains(selected_class)) {
 
-            /* SE il contatore è uguale al numero di celle senza bomba sono state selezionate
-            tutte le celle senza bomba, quindi vittoria! */
-            if (counter == noBombsCells_number) {
+                    cell.classList.add(selected_class);
+                    counter++;
+                    console.log(`counter: ${counter}`);
 
-                alert("Congratulazioni, hai vinto!!");
-                location.reload();
+                }
 
+                /* SE il contatore è uguale al numero di celle senza bomba sono state selezionate
+                tutte le celle senza bomba, quindi vittoria! */
+                if (counter == noBombsCells_number) {
+
+                    alert("Congratulazioni, hai vinto!!");
+
+                    endGame = true;
+
+                }
             }
 
         })
@@ -144,6 +149,13 @@ playBtn.addEventListener("click", function() {
     // Creare una variabile per contare quante caselle senza bomba vengono selezionate
     counter = 0;
 
+    /* BONUS: quando si clicca su una bomba e finisce la partita, 
+    evitare che si possa cliccare su altre celle */
+
+    /* Creare una variabile booleana per stabilire se si è arrivati alla fine del gioco,
+    in modo da poter bloccare la griglia arrivati alla fine */
+    endGame = false;
+
 });
 
 // Aggiungere un bottone per resettare la griglia
@@ -153,3 +165,17 @@ deleteBtn.addEventListener("click", function() {
     location.reload();
 
 });
+
+
+
+/* Creare una funzione che congeli la griglia quando invocata, 
+poi assegnarla agli eventListener relativi alle condizioni di fine partita */
+function freezeGrid(grid) {
+
+    for (let index = 0; index < grid.childNodes.length; index++) {
+        const cell = grid.childNodes[index];
+        console.log(cell);
+        Object.freeze(cell);
+    }
+
+}
