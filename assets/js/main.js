@@ -23,18 +23,6 @@ function generateGrid(number_of_cells, container, element_name, class_name) {
     }
 }
 
-// Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro.
-function activateCell(selector, active_class) {
-    const cells = document.querySelectorAll(selector);
-
-    for (let index = 0; index < cells.length; index++) {
-        const cell = cells[index];
-        cell.addEventListener('click', function() {
-            cell.classList.add(active_class);
-        })
-    }
-}
-
 // Leggere il valore di difficoltà inserito dall'utente e generare il corrispondente numero di caselle
 const playBtn = document.getElementById("playBtn");
 playBtn.addEventListener("click", function() {
@@ -44,20 +32,20 @@ playBtn.addEventListener("click", function() {
     switch (inputValue) {
         case "1":
             generateGrid(100, ".grid", "div", "cell_10");
-            activateCell('.cell_10', 'selected');
-            createBombs(16, 1, 100);
+            bombs = createBombs(16, 1, 100);
+            activateCell('.cell_10', bombs, 'selected', 'bomb');
             break;
 
         case "2":
             generateGrid(81, ".grid", "div", "cell_9");
-            activateCell('.cell_9', 'selected');
-            createBombs(16, 1, 81);
+            bombs = createBombs(16, 1, 81);
+            activateCell('.cell_9', bombs, 'selected', 'bomb');
             break;
 
         case "3":
             generateGrid(49, ".grid", "div", "cell_7");
-            activateCell('.cell_7', 'selected');
-            createBombs(16, 1, 49);
+            bombs = createBombs(16, 1, 49);
+            activateCell('.cell_7', bombs, 'selected', 'bomb');
             break;
 
         default:
@@ -111,4 +99,26 @@ function createBombs(bombs_number, min, max) {
     console.log(`Bombe: ${bombs}`);
     return bombs;
 
+}
+
+// Modificare la funzione activateCell per includere anche le bombe
+
+/* Quando l'utente clicca su ogni cella, la cella cliccata si colora di rosso se contiene una bomba,
+altrimenti si colora di azzurro */
+function activateCell(selector, bombs, selected_class, bomb_class) {
+    const cells = document.querySelectorAll(selector);
+
+    for (let index = 0; index < cells.length; index++) {
+        const cell = cells[index];
+        const cellNumber = parseInt(cell.innerHTML);
+        console.log(cellNumber);
+        cell.addEventListener('click', function() {
+
+            if (bombs.includes(cellNumber)) {
+                cell.classList.add(bomb_class);
+            } else {
+                cell.classList.add(selected_class);
+            }
+        })
+    }
 }
