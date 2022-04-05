@@ -21,47 +21,9 @@ function generateGrid(number_of_cells, container, element_name, class_name) {
         cell.innerHTML = `${i}`;
         cellsContainer.append(cell);
     }
+
+    return cellsContainer;
 }
-
-// Leggere il valore di difficoltà inserito dall'utente e generare il corrispondente numero di caselle
-const playBtn = document.getElementById("playBtn");
-playBtn.addEventListener("click", function() {
-
-    let inputValue = document.getElementById("difficulty").value;
-
-    switch (inputValue) {
-        case "1":
-            generateGrid(100, ".grid", "div", "cell_10");
-            bombs = createBombs(16, 1, 100);
-            activateCell('.cell_10', bombs, 'selected', 'bomb');
-            break;
-
-        case "2":
-            generateGrid(81, ".grid", "div", "cell_9");
-            bombs = createBombs(16, 1, 81);
-            activateCell('.cell_9', bombs, 'selected', 'bomb');
-            break;
-
-        case "3":
-            generateGrid(49, ".grid", "div", "cell_7");
-            bombs = createBombs(16, 1, 49);
-            activateCell('.cell_7', bombs, 'selected', 'bomb');
-            break;
-
-        default:
-            alert("Error");
-            break;
-    }
-});
-
-// Aggiungere un bottone per resettare la griglia
-const deleteBtn = document.getElementById("deleteBtn");
-deleteBtn.addEventListener("click", function() {
-
-    location.reload();
-
-});
-
 
 /* Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
 I numeri nella lista delle bombe non possono essere duplicati.
@@ -107,23 +69,87 @@ function createBombs(bombs_number, min, max) {
 altrimenti si colora di azzurro */
 function activateCell(selector, bombs, selected_class, bomb_class) {
     const cells = document.querySelectorAll(selector);
+    const noBombsCells_number = cells.length - bombs.length;
 
     for (let index = 0; index < cells.length; index++) {
         const cell = cells[index];
         const cellNumber = parseInt(cell.innerHTML);
-        //console.log(cellNumber);
+
         cell.addEventListener('click', function() {
 
             if (bombs.includes(cellNumber)) {
 
-                // SE la cella contiene una bomba si colora di rosso e la partita termina
+                /* SE la cella contiene una bomba si colora di rosso e la partita termina:
+                viene mostrato il numero di caselle senza bomba selezionate */
                 cell.classList.add(bomb_class);
-                alert("Hai perso, riprova!");
+                alert(`Hai perso, riprova! Punteggio ottenuto: ${counter}`);
                 location.reload();
 
-            } else {
-                cell.classList.add(selected_class);
             }
+
+            /* SE la cella non contiene una bomba e non è stata ancora selezionata
+            si colora di azzurro e il contatore viene incrementato */
+            else if (!cell.classList.contains(selected_class)) {
+
+                cell.classList.add(selected_class);
+                counter++;
+                console.log(`counter: ${counter}`);
+
+            }
+
+            /* SE il contatore è uguale al numero di celle senza bomba sono state selezionate
+            tutte le celle senza bomba, quindi vittoria! */
+            if (counter == noBombsCells_number) {
+
+                alert("Congratulazioni, hai vinto!!");
+                location.reload();
+
+            }
+
         })
+
     }
 }
+
+// Leggere il valore di difficoltà inserito dall'utente e generare il corrispondente numero di caselle
+const playBtn = document.getElementById("playBtn");
+playBtn.addEventListener("click", function() {
+
+    let inputValue = document.getElementById("difficulty").value;
+
+    switch (inputValue) {
+        case "1":
+            grid = generateGrid(100, ".grid", "div", "cell_10");
+            bombs = createBombs(16, 1, 100);
+            activateCell('.cell_10', bombs, 'selected', 'bomb');
+            break;
+
+        case "2":
+            grid = generateGrid(81, ".grid", "div", "cell_9");
+            bombs = createBombs(16, 1, 81);
+            activateCell('.cell_9', bombs, 'selected', 'bomb');
+            break;
+
+        case "3":
+            grid = generateGrid(49, ".grid", "div", "cell_7");
+            bombs = createBombs(1, 1, 49);
+            activateCell('.cell_7', bombs, 'selected', 'bomb');
+            break;
+
+        default:
+            alert("Error");
+            break;
+    }
+
+    // Creare una variabile per contare quante caselle senza bomba vengono selezionate
+    counter = 0;
+
+});
+
+// Aggiungere un bottone per resettare la griglia
+const deleteBtn = document.getElementById("deleteBtn");
+deleteBtn.addEventListener("click", function() {
+
+    location.reload();
+
+});
